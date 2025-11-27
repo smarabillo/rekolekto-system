@@ -1,0 +1,25 @@
+{
+  "name": "rekolekto-system",
+  "version": "1.0.0",
+  "description": "Node Based Web App System Template (React + Node)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm start --prefix server\" \"npm run dev --prefix client\"",
+    "postinstall": "npm install --prefix server && npm install --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sbmwhylt/fullstack-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sbmwhylt/fullstack-template/issues"
+  },
+  "homepage": "https://github.com/sbmwhylt/fullstack-template#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
