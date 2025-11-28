@@ -1,23 +1,49 @@
------------------------------------------------------
+# Rekolekto System Backend
 
-Backend/server: Node + Express JS + sequelize pg + bcyrpt + jsonwebtoken + dotenv + CORS + nodemon 
-Database: PostgresQL
+## Overview
 
-- Express – Minimal and flexible Node.js web framework for building APIs and server-side applications.
-- Sequelize – Promise-based ORM for Node.js that supports SQL databases like PostgreSQL, MySQL, MariaDB, and SQLite.
-- bcrypt – Library for securely hashing and comparing passwords.
-- jsonwebtoken (JWT) – Standard for creating and verifying JSON Web Tokens used in authentication and authorization.
-- dotenv – Loads environment variables from a .env file into process.env for configuration management.
-- CORS – Middleware that enables and configures Cross-Origin Resource Sharing in Express.
-- Nodemon – Development tool that automatically restarts the Node.js server when file changes are detected.
+**Backend / Server:** Node.js + Express.js + Sequelize + PostgreSQL + bcrypt + JSON Web Tokens + dotenv + CORS + nodemon  
+**Database:** PostgreSQL
 
-Installation:  
+This backend handles API endpoints, authentication, and database operations for the Rekolekto system.
 
-- npm install express sequelize bcrypt jsonwebtoken dotenv cors pg pg-hstore
-- npm install --save-dev nodemon
+---
 
------------------------------------------------------
+## Stack
 
-Sequilize Commands: 
-- npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string (example) --> builds model and migration
-- npx sequelize-cli seed:generate --name user --> builds seeder for user
+- **Express** – Minimal and flexible Node.js web framework for building APIs.
+- **Sequelize** – Promise-based ORM for SQL databases (PostgreSQL, MySQL, SQLite, etc.).
+- **bcrypt** – Securely hashes and compares passwords.
+- **jsonwebtoken (JWT)** – Creates and verifies tokens for authentication.
+- **dotenv** – Loads environment variables from a `.env` file.
+- **CORS** – Enables cross-origin requests in Express.
+- **Nodemon** – Automatically restarts the server on file changes (development only).
+
+---
+
+## Installation 
+
+npm install express sequelize bcrypt jsonwebtoken dotenv cors
+npm install --save-dev nodemon sequelize-cli
+
+
+## ENV creation
+
+PORT=3000
+DATABASE_URL=postgres://username:password@localhost:5432/dbname
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRATION=3600
+
+## Start Server 
+
+npm run start
+
+## Sequelize commands
+
+Generate a model and migration:
+- npx sequelize-cli model:generate --name <Model/Table name> --attributes --id:string 
+
+Generate a seeder: 
+- npx sequelize-cli seed:generate --name demo-<Model/Table name>
+
+NOTE: Custom scripts found in package json for shorter commands.
