@@ -10,6 +10,9 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Students.hasMany(models.Scans, {
+        foreignKey: "user_id",
+      });
     }
   }
   Students.init(

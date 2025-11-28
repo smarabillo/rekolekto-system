@@ -41,7 +41,7 @@ npm run start
 ## Sequelize commands
 
 Generate a model and migration:
-- npx sequelize-cli model:generate --name <Model/Table name> --attributes --id:string 
+- npx sequelize-cli model:generate --name <Model/Table name> --attributes name:string, ... 
 
 Generate a seeder: 
 - npx sequelize-cli seed:generate --name demo-<Model/Table name>
