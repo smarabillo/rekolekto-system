@@ -1,9 +1,8 @@
 import { Router } from "express";
 import {
   create,
-  login,
   getAll,
-  getOne,
+  getOne, 
   update,
   remove,
 } from "../controllers/ItemController.js";
@@ -11,7 +10,6 @@ import {
 const router = Router();
 
 router.post("/", create);
-router.post("/login", login);
 router.get("/", getAll);
 router.get("/:id", getOne);
 router.put("/:id", update);
