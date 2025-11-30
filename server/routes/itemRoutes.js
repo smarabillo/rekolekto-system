@@ -6,7 +6,7 @@ import {
   getOne,
   update,
   remove,
-} from "../controllers/AdminController.js";
+} from "../controllers/ItemController.js";
 
 const router = Router();
 
