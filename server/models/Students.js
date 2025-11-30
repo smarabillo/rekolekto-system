@@ -21,12 +21,14 @@ export default (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
-      grade: DataTypes.ENUM,
+      grade: DataTypes.ENUM('7', '8', '9', '10', '11', '12'),
       section: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Students",
+      tableName: "students",
+      freezeTableName: true,
     }
   );
   return Students;

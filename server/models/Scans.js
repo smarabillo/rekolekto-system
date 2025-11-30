@@ -19,8 +19,8 @@ export default (sequelize, DataTypes) => {
     {
       user_id: DataTypes.INTEGER,
       barcode: DataTypes.STRING,
-      material_detected: DataTypes.ENUM,
-      size: DataTypes.ENUM,
+      material_detected: DataTypes.ENUM('PET', 'CAN'),
+      size: DataTypes.ENUM('SMALL', 'LARGE'),
       points_earned: DataTypes.INTEGER,
       image_path: DataTypes.TEXT,
       response_time_ms: DataTypes.INTEGER,
@@ -28,6 +28,8 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Scans",
+      tableName: "scans",
+      freezeTableName: true,
     }
   );
   return Scans;

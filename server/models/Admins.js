@@ -22,6 +22,8 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Admins",
+      tableName: "admins",
+      freezeTableName: true,
     }
   );
   return Admins;

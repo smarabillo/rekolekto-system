@@ -1,5 +1,5 @@
-'use strict';
-import { Model } from 'sequelize';
+"use strict";
+import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Items extends Model {
     /**
@@ -11,15 +11,20 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Items.init({
-    barcode: DataTypes.STRING,
-    product_name: DataTypes.STRING,
-    material_type: DataTypes.ENUM,
-    size: DataTypes.ENUM,
-    points: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Items',
-  });
+  Items.init(
+    {
+      barcode: DataTypes.STRING,
+      product_name: DataTypes.STRING,
+      material_type: DataTypes.ENUM("PET", "CAN"),
+      size: DataTypes.ENUM("SMALL", "LARGE"),
+      points: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "Items",
+      tableName: "items",
+      freezeTableName: true,
+    }
+  );
   return Items;
 };

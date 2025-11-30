@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import sequelize from "./config/db.js"; 
+import routes from './routes/index.js'; 
 
 dotenv.config();
 
@@ -18,8 +19,7 @@ app.get("/", (req, res) => {
 });
 
 //--------------- routes
-// import routes from './routes/index.js'; // Uncomment if you have routes
-// app.use("/api", routes);
+app.use("/api", routes);
 
 //--------------- health route with DB check
 app.get("/health", async (req, res) => {
