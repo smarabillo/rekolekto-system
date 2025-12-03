@@ -25,7 +25,7 @@ export async function up(queryInterface, Sequelize) {
     },
     size: {
       type: Sequelize.ENUM('SMALL', 'LARGE', 'N/A'),
-      allowNull: false
+      allowNull: true
     },
     points_earned: {
       type: Sequelize.INTEGER,
