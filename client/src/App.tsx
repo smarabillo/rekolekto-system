@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <>Routes</>
+      <h1>routes</h1>
     </>
   );
 }
