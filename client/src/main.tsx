@@ -2,12 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@/styles/index.css";
 import App from "./App";
-import { Provider } from "./components/ui/provider";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "react-hot-toast";
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <App />
-    </Provider>
+      <Toaster position="top-right" />
+    </ThemeProvider>
   </StrictMode>
 );
