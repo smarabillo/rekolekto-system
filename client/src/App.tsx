@@ -1,9 +1,13 @@
-function App() {
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import AdminLogin from "./pages/Admin/Login";
+
+export default function App() {
   return (
-    <>
-      <h1>routes</h1>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
