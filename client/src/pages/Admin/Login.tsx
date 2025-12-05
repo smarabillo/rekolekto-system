@@ -57,7 +57,7 @@ export default function AdminLogin() {
               className="w-15 mt-2"
             />
           </div>
-          <CardTitle>Rekolekto System</CardTitle>
+          <CardTitle className="text-2xl font-normal">Rekolekto System</CardTitle>
           <CardDescription>
             Enter your username and password to access the admin panel.
           </CardDescription>

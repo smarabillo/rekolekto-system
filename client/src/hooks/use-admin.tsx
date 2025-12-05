@@ -34,7 +34,6 @@ export interface LoginResponse {
   admin: Admin;
 }
 
-
 export function useAdmin() {
   const base = `${import.meta.env.VITE_API_URL}/admins`;
 
