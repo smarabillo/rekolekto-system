@@ -1,7 +1,5 @@
 // src/hooks/useAdminApi.ts
 
-// src/hooks/useAdminApi.ts
-
 export interface Admin {
   id: string;
   userName: string;
@@ -31,9 +29,11 @@ export interface LoginCredentials {
 }
 
 export interface LoginResponse {
+  token: string;
   message: string;
   admin: Admin;
 }
+
 
 export function useAdmin() {
   const base = `${import.meta.env.VITE_API_URL}/admins`;
