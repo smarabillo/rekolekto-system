@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Admin } from "@/hooks/use-admin";
 

@@ -27,21 +27,27 @@ export default function AdminLogin() {
 
     try {
       const result = await loginAdmin({ userName, password });
-      console.log("Logged in:", result.admin);
       toast.success("Login successful");
       login(result.admin);
       navigate("/admin/dashboard");
     } catch (err) {
-      console.error(err);
       toast.error("Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <section className="min-h-screen flex justify-center items-center bg-gray-50 p-4">
+    <section className="min-h-screen flex justify-center items-center bg-gray-50">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Welcome Back Admin</CardTitle>
+          <div className="flex gap-2 items-center justify-center mb-6">
+            <img src="/logo-cstr.png" alt="CSTR Logo" className="w-15" />
+            <img
+              src="/logo-badge.png"
+              alt="Rekolekto Badge Logo"
+              className="w-15 mt-2"
+            />
+          </div>
+          <CardTitle>Rekolekto System</CardTitle>
           <CardDescription>
             Enter your username and password to access the admin panel.
           </CardDescription>
@@ -56,24 +62,33 @@ export default function AdminLogin() {
                   id="userName"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  placeholder="admin123"
+                  placeholder="Your username"
                   required
                 />
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm font-light underline-offset-4 hover:underline "
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
                 <Input
                   id="password"
                   type="password"
                   value={password}
+                  placeholder="Your password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
             </div>
 
-            <CardFooter className="flex-col gap-2 mt-4">
+            <CardFooter className="mt-4 px-0">
               <Button type="submit" className="w-full">
                 Login
               </Button>

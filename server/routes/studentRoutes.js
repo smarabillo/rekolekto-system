@@ -6,6 +6,8 @@ import {
   getOne,
   update,
   remove,
+  verifyOwnStudent,
+  verifyStudentToken,
 } from "../controllers/StudentController.js";
 
 const router = Router();

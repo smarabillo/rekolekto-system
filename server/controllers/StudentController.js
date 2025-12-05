@@ -1,7 +1,12 @@
 import db from "../models/index.js";
+import jwt from "jsonwebtoken";
 import { hash as _hash, compare } from "bcrypt";
 
 const { Students: Student } = db;
+
+// JWT secret - store this in environment variables
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 // Create
 export async function create(req, res) {
@@ -17,7 +22,12 @@ export async function create(req, res) {
       grade,
       section,
     });
-    res.status(201).json(student);
+
+    // Remove password from response
+    const studentData = student.toJSON();
+    delete studentData.password;
+
+    res.status(201).json(studentData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,14 +38,38 @@ export async function login(req, res) {
   try {
     const { studentId, password } = req.body;
     const student = await Student.findOne({ where: { studentId } });
+
     if (!student) {
       return res.status(404).json({ error: "User not found" });
     }
+
     const match = await compare(password, student.password);
     if (!match) {
       return res.status(401).json({ error: "Wrong password" });
     }
-    res.json({ message: "Login successful", student });
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: student.id,
+        studentId: student.studentId,
+        role: "student",
+        grade: student.grade,
+        section: student.section,
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    // Remove password from response
+    const studentData = student.toJSON();
+    delete studentData.password;
+
+    res.json({
+      message: "Login successful",
+      token,
+      student: studentData,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -44,7 +78,9 @@ export async function login(req, res) {
 // Get all
 export async function getAll(req, res) {
   try {
-    const students = await Student.findAll();
+    const students = await Student.findAll({
+      attributes: { exclude: ["password"] },
+    });
     res.json(students);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -57,6 +93,7 @@ export async function getOne(req, res) {
     const { id } = req.params;
     const student = await Student.findOne({
       where: { studentId: id },
+      attributes: { exclude: ["password"] },
     });
     if (!student) {
       return res.status(404).json({ error: "Not found" });
@@ -74,9 +111,12 @@ export async function update(req, res) {
     const { studentId, password, firstName, lastName, grade, section } =
       req.body;
     const student = await Student.findByPk(id);
+
     if (!student) return res.status(404).json({ error: "Not found" });
+
     let updatedPassword = student.password;
     if (password) updatedPassword = await _hash(password, 10);
+
     await student.update({
       studentId,
       password: updatedPassword,
@@ -85,7 +125,12 @@ export async function update(req, res) {
       grade,
       section,
     });
-    res.json(student);
+
+    // Remove password from response
+    const studentData = student.toJSON();
+    delete studentData.password;
+
+    res.json(studentData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -102,4 +147,43 @@ export async function remove(req, res) {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+}
+
+// Middleware to verify JWT token for students
+export function verifyStudentToken(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Ensure the token is for a student
+    if (decoded.role !== "student") {
+      return res
+        .status(403)
+        .json({ error: "Access denied. Student role required." });
+    }
+
+    req.student = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+}
+
+// Middleware to verify token is for the same student (for self-access routes)
+export function verifyOwnStudent(req, res, next) {
+  const { id } = req.params;
+
+  // Check if the student is accessing their own data
+  if (req.student.id !== parseInt(id)) {
+    return res
+      .status(403)
+      .json({ error: "Access denied. You can only access your own data." });
+  }
+
+  next();
 }
