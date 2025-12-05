@@ -1,5 +1,3 @@
-// src/hooks/useAdminApi.ts
-
 export interface Admin {
   id: string;
   userName: string;
@@ -37,21 +35,21 @@ export interface LoginResponse {
 export function useAdmin() {
   const base = `${import.meta.env.VITE_API_URL}/admins`;
 
-  // GET /api/admin
+  // GET /api/admins
   const getAllAdmins = async (): Promise<Admin[]> => {
     const res = await fetch(base);
     if (!res.ok) throw new Error("Failed to fetch admins");
     return res.json();
   };
 
-  // GET /api/admin/:id
+  // GET /api/admins/:id
   const getAdmin = async (id: string): Promise<Admin> => {
     const res = await fetch(`${base}/${id}`);
     if (!res.ok) throw new Error("Admin not found");
     return res.json();
   };
 
-  // POST /api/admin (create)
+  // POST /api/admins (create)
   const createAdmin = async (data: CreateAdminData): Promise<Admin> => {
     const res = await fetch(base, {
       method: "POST",
@@ -62,7 +60,7 @@ export function useAdmin() {
     return res.json();
   };
 
-  // PUT /api/admin/:id
+  // PUT /api/admins/:id
   const updateAdmin = async (
     id: string,
     data: UpdateAdminData
@@ -76,7 +74,7 @@ export function useAdmin() {
     return res.json();
   };
 
-  // DELETE /api/admin/:id
+  // DELETE /api/admins/:id
   const deleteAdmin = async (id: string): Promise<{ message: string }> => {
     const res = await fetch(`${base}/${id}`, {
       method: "DELETE",
@@ -85,7 +83,7 @@ export function useAdmin() {
     return res.json();
   };
 
-  // POST /api/admin/login
+  // POST /api/admins/login
   const loginAdmin = async (
     credentials: LoginCredentials
   ): Promise<LoginResponse> => {

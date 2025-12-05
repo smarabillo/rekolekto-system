@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import type { JSX } from "react/jsx-runtime";
 
 // pages admin
+import EntryPage from "./pages/Entry";
 import AdminLogin from "./pages/Admin/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import StudentManegement from "./pages/Admin/StudentManegement";
@@ -18,7 +19,8 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AdminLogin />} />
+          <Route path="/" element={<EntryPage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin/dashboard"
             element={
