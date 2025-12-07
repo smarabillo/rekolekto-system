@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
   const { loginAdmin } = useAdmin();
-  const { login, token } = useAuth();
+  const { login, token } = useAdminAuth();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -57,9 +57,9 @@ export default function AdminLogin() {
               className="w-15 mt-2"
             />
           </div>
-          <CardTitle className="text-2xl font-normal">Rekolekto System</CardTitle>
+          <CardTitle className="text-2xl font-normal">Admin Portal</CardTitle>
           <CardDescription>
-            Enter your username and password to access the admin panel.
+            This is the admin portal. Please enter your credentials to log in.
           </CardDescription>
         </CardHeader>
 

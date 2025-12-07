@@ -1,8 +1,8 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminLayout from "@/layouts/AdminLayout";
 
 export default function AdminDashboard() {
-  const { admin } = useAuth();
+  const { admin } = useAdminAuth();
 
   return (
     <>

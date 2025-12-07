@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAdmin } from "@/hooks/use-admin";
+import { useStudent } from "@/hooks/use-student";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,20 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useStudentAuth } from "@/contexts/StudentAuthContext";
 import { Loader2 } from "lucide-react";
 
-export default function AdminLogin() {
-  const { loginAdmin } = useAdmin();
-  const { login, token } = useAuth();
-  const [userName, setUserName] = useState("");
+export default function StudentLogin() {
+  const { loginStudent } = useStudent();
+  const { login, token } = useStudentAuth();
+  const [studentId, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
-      navigate("/admin/dashboard", { replace: true });
+      navigate("/student/dashboard", { replace: true });
     }
   }, [token, navigate]);
 
@@ -34,10 +34,10 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      const result = await loginAdmin({ userName, password });
+      const result = await loginStudent({ studentId, password });
       toast.success("Login successful");
-      login(result.admin, result.token);
-      navigate("/admin/dashboard", { replace: true });
+      login(result.student, result.token);
+      navigate("/student/dashboard", { replace: true });
     } catch (err) {
       toast.error("Login failed. Please check your credentials.");
     } finally {
@@ -57,21 +57,21 @@ export default function AdminLogin() {
               className="w-15 mt-2"
             />
           </div>
-          <CardTitle className="text-2xl font-normal">Rekolekto System</CardTitle>
+          <CardTitle className="text-2xl font-normal">Student Portal</CardTitle>
           <CardDescription>
-            Enter your username and password to access the admin panel.
+            This is the student portal. Please enter your credentials to login.{" "}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="userName">Username</Label>
+              <Label htmlFor="studentId">Student ID</Label>
               <Input
-                id="userName"
-                value={userName}
+                id="studentId"
+                value={studentId}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="Your username"
+                placeholder="Your Student ID"
                 required
               />
             </div>
