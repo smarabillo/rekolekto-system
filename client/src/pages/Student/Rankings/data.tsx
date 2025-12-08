@@ -1,22 +1,15 @@
-type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
+type Rankings = {
+  rank: number;
+  name: string;
+  email: string;
+  score: number;
+};
 
-export const payments: Payment[] = [
+export const rankings: Rankings[] = [
   {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
+    rank: 1,
+    name: "Alice Johnson",
+    email: " ",
+    score: 98,
   },
-  {
-    id: "489e1d42",
-    amount: 125,
-    status: "processing",
-    email: "example@gmail.com",
-  },
-  // ...
-]
+];
