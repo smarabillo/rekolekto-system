@@ -1,4 +1,5 @@
 export interface Student {
+  id: string;
   studentId: string;
   password: string;
   firstName: string;
@@ -36,8 +37,24 @@ export interface LoginResponse {
   student: Student;
 }
 
+export interface StudentWithRank {
+  studentId: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  rank: number;
+  totalPoints: number;
+}
+
 export function useStudent() {
   const base = `${import.meta.env.VITE_API_URL}/students`;
+
+  // GET /api/students/rankings - Get students sorted by total points
+  const getStudentRankings = async (): Promise<StudentWithRank[]> => {
+    const res = await fetch(`${base}/rankings`);
+    if (!res.ok) throw new Error("Failed to fetch rankings");
+    return res.json();
+  };
 
   // GET /api/students
   const getAllStudents = async (): Promise<Student[]> => {
@@ -87,7 +104,6 @@ export function useStudent() {
     return res.json();
   };
 
-
   // POST /api/students/login
   const loginStudent = async (
     credentials: LoginCredentials
@@ -108,5 +124,6 @@ export function useStudent() {
     updateStudent,
     deleteStudent,
     loginStudent,
+    getStudentRankings,
   };
 }

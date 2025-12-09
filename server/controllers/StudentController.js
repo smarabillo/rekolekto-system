@@ -2,7 +2,7 @@ import db from "../models/index.js";
 import jwt from "jsonwebtoken";
 import { hash as _hash, compare } from "bcrypt";
 
-const { Students: Student } = db;
+const { Students: Student, Scans: Scan } = db;
 
 // JWT secret - store this in environment variables
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
@@ -100,6 +100,65 @@ export async function getOne(req, res) {
     }
     res.json(student);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Get rankings - students sorted by total points
+export async function getRankings(req, res) {
+  try {
+    const { sequelize } = db;
+    
+    // Get all students with their total points
+    const rankings = await Student.findAll({
+      include: [
+        {
+          model: Scan,
+          attributes: [], // Don't include scan details, just aggregate
+        },
+      ],
+      attributes: [
+        'id',
+        'studentId',
+        'firstName',
+        'lastName',
+        'grade',
+        'section',
+        [
+          sequelize.fn('COALESCE', 
+            sequelize.fn('SUM', sequelize.col('Scans.points_earned')), 
+            0
+          ),
+          'totalPoints'
+        ],
+        [
+          sequelize.fn('COUNT', sequelize.col('Scans.id')),
+          'totalScans'
+        ]
+      ],
+      group: [
+        'Students.id',
+        'Students.studentId',
+        'Students.firstName',
+        'Students.lastName',
+        'Students.grade',
+        'Students.section'
+      ],
+      order: [[sequelize.fn('SUM', sequelize.col('Scans.points_earned')), 'DESC NULLS LAST']],
+      raw: true,
+    });
+
+    // Add rank to each student
+    const rankedStudents = rankings.map((student, index) => ({
+      ...student,
+      rank: index + 1,
+      totalPoints: parseInt(student.totalPoints) || 0,
+      totalScans: parseInt(student.totalScans) || 0,
+    }));
+
+    res.json(rankedStudents);
+  } catch (err) {
+    console.error("Rankings error:", err);
     res.status(500).json({ error: err.message });
   }
 }
