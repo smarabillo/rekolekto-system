@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Scan, Camera, CheckCircle2 } from "lucide-react";
@@ -44,7 +50,6 @@ export default function ScanDialog({
   switchToManual,
   closeScanDialog,
 }: ScanDialogProps) {
-  
   // When dialog opens, start camera automatically
   useEffect(() => {
     if (open && useCamera && !useManualInput) {
@@ -102,32 +107,55 @@ export default function ScanDialog({
 
           {/* Camera Mode (Default) */}
           {useCamera && !useManualInput ? (
-            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-              {/* REAL CAMERA FEED */}
-              <video
-                ref={videoRef}
-                playsInline
-                muted
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+            <div className="space-y-3">
+              <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+                {/* REAL CAMERA FEED */}
+                <video
+                  ref={videoRef}
+                  playsInline
+                  muted
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
 
-              <div
-                className={`absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded animate-pulse ${
-                  scanActiveRef.current ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                Scanner: {scanActiveRef.current ? "ON" : "OFF"}
+                {/* Simple Scanner Status Indicator */}
+                <div className="absolute top-3 left-3 flex items-center gap-2">
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      scanActiveRef.current
+                        ? "bg-green-500 animate-pulse"
+                        : "bg-red-500"
+                    }`}
+                  ></div>
+                  <span className="text-xs text-white bg-black/50 px-2 py-1 rounded">
+                    {scanActiveRef.current ? "Scanning" : "Scanner Off"}
+                  </span>
+                </div>
+
+                {/* Camera Controls */}
+                <div className="absolute top-3 right-3">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={switchToManual}
+                    className="bg-white/90 hover:bg-white"
+                  >
+                    Manual Entry
+                  </Button>
+                </div>
+
+                {/* Simple Centering Guide - Just a subtle border */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-48 h-32 border-2 border-white/30 rounded-lg">
+                    {/* Simple blinking dot in center */}
+                  </div>
+                </div>
               </div>
 
-              {/* Camera Controls */}
-              <div className="absolute top-2 right-2 flex gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={switchToManual}
-                >
-                  Enter Manually
-                </Button>
+              {/* Simple Instructions */}
+              <div className="text-center text-sm text-gray-600">
+                {scanActiveRef.current
+                  ? "Point barcode at camera. Keep it steady."
+                  : "Scanner is off. Camera may be starting..."}
               </div>
             </div>
           ) : (
@@ -198,8 +226,8 @@ export default function ScanDialog({
           <p>
             💡 Tip:{" "}
             {useCamera && !useManualInput
-              ? "Hold barcode steady in front of camera. Click 'Enter Manually' if camera isn't working."
-              : "Click 'Camera' button to switch back to camera scanning."}
+              ? "Hold barcode steady in the center of the frame. Green light means scanner is active."
+              : "Press Enter to submit or switch to camera scanning."}
           </p>
         </div>
       </DialogContent>
