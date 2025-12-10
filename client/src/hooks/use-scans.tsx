@@ -1,3 +1,13 @@
+interface ScanApiResponse {
+  message: string;
+  scanId: number;
+  material_type: "CAN" | "PET";
+  size: "SMALL" | "LARGE" | null;
+  points: number;
+  studentName: string;
+  itemName: string; 
+}
+
 export interface StudentInfo {
   id: number;
   studentId: string;
@@ -22,6 +32,12 @@ export interface Scan {
   createdAt: string;
   updatedAt: string;
   Student: StudentInfo;
+  Item?: {  
+    name: string;
+    barcode: string;
+    material_type: string;
+    size: string | null;
+  };
 }
 
 export function useScans() {

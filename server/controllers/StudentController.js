@@ -108,7 +108,7 @@ export async function getOne(req, res) {
 export async function getRankings(req, res) {
   try {
     const { sequelize } = db;
-    
+
     // Get all students with their total points
     const rankings = await Student.findAll({
       include: [
@@ -118,33 +118,36 @@ export async function getRankings(req, res) {
         },
       ],
       attributes: [
-        'id',
-        'studentId',
-        'firstName',
-        'lastName',
-        'grade',
-        'section',
+        "id",
+        "studentId",
+        "firstName",
+        "lastName",
+        "grade",
+        "section",
         [
-          sequelize.fn('COALESCE', 
-            sequelize.fn('SUM', sequelize.col('Scans.points_earned')), 
+          sequelize.fn(
+            "COALESCE",
+            sequelize.fn("SUM", sequelize.col("Scans.points_earned")),
             0
           ),
-          'totalPoints'
+          "totalPoints",
         ],
-        [
-          sequelize.fn('COUNT', sequelize.col('Scans.id')),
-          'totalScans'
-        ]
+        [sequelize.fn("COUNT", sequelize.col("Scans.id")), "totalScans"],
       ],
       group: [
-        'Students.id',
-        'Students.studentId',
-        'Students.firstName',
-        'Students.lastName',
-        'Students.grade',
-        'Students.section'
+        "Students.id",
+        "Students.studentId",
+        "Students.firstName",
+        "Students.lastName",
+        "Students.grade",
+        "Students.section",
       ],
-      order: [[sequelize.fn('SUM', sequelize.col('Scans.points_earned')), 'DESC NULLS LAST']],
+      order: [
+        [
+          sequelize.fn("SUM", sequelize.col("Scans.points_earned")),
+          "DESC NULLS LAST",
+        ],
+      ],
       raw: true,
     });
 

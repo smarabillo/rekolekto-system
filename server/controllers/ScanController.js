@@ -36,7 +36,7 @@ export const scanItem = async (req, res) => {
       user_id: student.id,
       barcode,
       material_detected: item.material_type,
-      size: item.size, 
+      size: item.size,
       points_earned: points,
     });
     return res.json({
