@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { useStudentAuth } from "@/contexts/StudentAuthContext";
 import { useScans } from "@/hooks/use-scans";
 import type { Scan as ScanType } from "@/hooks/use-scans";
-import { useStudent, type Student, type StudentWithRank } from "@/hooks/use-student";
+import {
+  useStudent,
+  type Student,
+  type StudentWithRank,
+} from "@/hooks/use-student";
 import { toast } from "react-hot-toast";
 
 export function useDashboardData() {
@@ -35,7 +39,7 @@ export function useDashboardData() {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         // Get current student from auth context
         if (authStudent) {
           setCurrentStudent(authStudent);
@@ -45,30 +49,39 @@ export function useDashboardData() {
               setCurrentStudent(studentProfile);
             }
           } catch (profileError) {
-            console.warn("Could not fetch student profile, using auth data:", profileError);
+            console.warn(
+              "Could not fetch student profile, using auth data:",
+              profileError
+            );
           }
         }
-        
+
         // Fetch scans from API
         let scansData: ScanType[] = [];
         try {
           scansData = await getAllScans();
         } catch (scanError) {
-          console.error("Failed to fetch scans from API, using mock data:", scanError);
+          console.error(
+            "Failed to fetch scans from API, using mock data:",
+            scanError
+          );
           toast.error("Could not load scans. Using demo data.");
         }
         setScans(scansData);
-        
+
         // Fetch rankings from API
         let rankingsData: StudentWithRank[] = [];
         try {
           rankingsData = await getStudentRankings();
         } catch (rankError) {
-          console.error("Failed to fetch rankings from API, using mock data:", rankError);
+          console.error(
+            "Failed to fetch rankings from API, using mock data:",
+            rankError
+          );
           toast.error("Could not load rankings. Using demo data.");
         }
         setRankings(rankingsData);
-        
+
         // Find current student's rank
         if (currentStudent || authStudent) {
           const studentToUse = currentStudent || authStudent;
@@ -81,7 +94,7 @@ export function useDashboardData() {
             }
             return false;
           });
-          
+
           if (myRank) {
             setCurrentRank(myRank.rank);
             setTotalPoints(myRank.totalPoints);
@@ -92,7 +105,8 @@ export function useDashboardData() {
             );
             setTotalPoints(pointsFromScans);
             const estimatedRank =
-              rankingsData.filter((r) => r.totalPoints > pointsFromScans).length + 1;
+              rankingsData.filter((r) => r.totalPoints > pointsFromScans)
+                .length + 1;
             setCurrentRank(estimatedRank);
           }
         } else {
@@ -110,7 +124,7 @@ export function useDashboardData() {
         setIsLoading(false);
       }
     };
-    
+
     fetchData();
   }, [authStudent]);
 

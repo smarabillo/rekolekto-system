@@ -50,7 +50,7 @@ export default function StudentLogin() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="flex gap-2 items-center justify-start mb-6">
-            <img src="/logo-cstr.png" alt="CSTR Logo" className="w-15" />
+            {/* <img src="/logo-cstr.png" alt="CSTR Logo" className="w-15" /> */}
             <img
               src="/logo-badge.png"
               alt="Rekolekto Badge Logo"

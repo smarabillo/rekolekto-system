@@ -53,7 +53,6 @@ export default function Dashboard() {
   const { handleScanSubmit } = useScanSubmit({
     barcodeInput,
     setBarcodeInput,
-    isScanning,
     currentStudent,
     authStudent,
     scans,

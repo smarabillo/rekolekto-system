@@ -44,6 +44,19 @@ export function useBarcodeScanner() {
     }
   }, []);
 
+  const resetDecoder = useCallback(() => {
+    if (!scannerRef.current || !videoRef.current) return;
+    // ZXing: re-register the same callback without touching the stream
+    if (scanCallbackRef.current) {
+      scannerRef.current.decodeFromVideoDevice(
+        null,
+        videoRef.current,
+        scanCallbackRef.current
+      );
+    }
+    setIsProcessingScan(false);
+  }, []);
+
   const handleCameraScan = useCallback(async () => {
     if (!videoRef.current) {
       // console.error("Video ref not available");
@@ -188,7 +201,7 @@ export function useBarcodeScanner() {
           scanCallbackRef.current
         );
       } catch (error) {
-        // console.error("Error resuming scanner:", error);
+        console.error("Error resuming scanner:", error);
         // If resume fails, restart the scanner
         handleCameraScan();
       }
@@ -197,7 +210,7 @@ export function useBarcodeScanner() {
 
   const startCameraScan = useCallback(() => {
     if (useCamera && !useManualInput && videoRef.current) {
-      // console.log("Starting camera scan...");
+      console.log("Starting camera scan...");
       handleCameraScan();
     }
   }, [useCamera, useManualInput, handleCameraScan]);
@@ -217,7 +230,7 @@ export function useBarcodeScanner() {
 
   // Cleanup on unmount
   const cleanup = useCallback(() => {
-    // console.log("Cleaning up scanner");
+    console.log("Cleaning up scanner");
     stopCamera();
   }, [stopCamera]);
 
@@ -245,5 +258,6 @@ export function useBarcodeScanner() {
     switchToManual,
     switchToCamera,
     cleanup,
+    resetDecoder,
   };
 }

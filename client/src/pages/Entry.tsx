@@ -8,7 +8,7 @@ export default function Entry() {
         {/* Left - Welcome */}
         <div className="flex flex-col justify-center items-center text-center px-6 py-10 md:py-0 gap-4">
           <div className="flex flex-col md:flex-row gap-2 items-center justify-center">
-            <img src="/logo-cstr.png" alt="" className="w-18 mb-2" />
+            {/* <img src="/logo-cstr.png" alt="" className="w-18 mb-2" /> */}
             <img src="/logo-name.png" alt="" className="w-60" />
           </div>
 
