@@ -48,6 +48,9 @@ export default function Dashboard() {
     scanActiveRef,
     stopCamera,
     handleCameraScan,
+    resumeScanning, 
+    isProcessingScan, 
+    setIsProcessingScan,
   } = useBarcodeScanner();
 
   const { handleScanSubmit } = useScanSubmit({
@@ -147,6 +150,9 @@ export default function Dashboard() {
         stopCamera={stopCamera}
         handleCameraScan={handleCameraScan}
         handleScanSubmit={handleScanSubmit}
+        resumeScanning={resumeScanning}
+        isProcessingScan={isProcessingScan}
+        setIsProcessingScan={setIsProcessingScan}
         switchToManual={() => {
           setUseCamera(false);
           setUseManualInput(true);

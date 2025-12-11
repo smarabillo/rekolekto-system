@@ -29,6 +29,9 @@ interface ScanDialogProps {
   handleScanSubmit: () => Promise<boolean>;
   switchToManual: () => void;
   closeScanDialog: () => void;
+  resumeScanning: () => void;
+  isProcessingScan: boolean;
+  setIsProcessingScan: (value: boolean) => void;
 }
 
 export default function ScanDialog({
@@ -45,6 +48,9 @@ export default function ScanDialog({
   handleScanSubmit,
   switchToManual,
   closeScanDialog,
+  resumeScanning,
+  isProcessingScan,
+  setIsProcessingScan,
 }: ScanDialogProps) {
   const [scanMessage, setScanMessage] = useState<{
     type: "success" | "error" | null;
@@ -102,6 +108,7 @@ export default function ScanDialog({
     if (!barcode.trim() || isProcessingRef.current) return;
 
     isProcessingRef.current = true;
+    setIsProcessingScan(true);
     setCurrentBarcode(barcode);
 
     try {
@@ -131,13 +138,20 @@ export default function ScanDialog({
       setBarcodeInput("");
       setCurrentBarcode("");
     } finally {
-      // Clear processing flag after delay
+      // Clear processing flag after delay and resume scanning
       if (scanTimeoutRef.current) {
         clearTimeout(scanTimeoutRef.current);
       }
       scanTimeoutRef.current = setTimeout(() => {
         isProcessingRef.current = false;
         lastScannedRef.current = ""; // Allow scanning same barcode again after delay
+        setIsProcessingScan(false);
+
+        // Resume the camera scanner
+        if (open && useCamera && scanActiveRef.current) {
+          console.log("Resuming scanner after successful scan");
+          resumeScanning();
+        }
       }, 1000);
     }
   };
@@ -264,7 +278,7 @@ export default function ScanDialog({
                 <div className="absolute top-3 left-3 flex items-center gap-2">
                   <div
                     className={`w-3 h-3 rounded-full ${
-                      isProcessingRef.current
+                      isProcessingRef.current || isProcessingScan
                         ? "bg-yellow-500 animate-pulse"
                         : scanActiveRef.current
                         ? "bg-green-500 animate-pulse"
@@ -272,7 +286,7 @@ export default function ScanDialog({
                     }`}
                   ></div>
                   <span className="text-xs text-white bg-black/50 px-2 py-1 rounded">
-                    {isProcessingRef.current
+                    {isProcessingRef.current || isProcessingScan
                       ? `Processing: ${currentBarcode || "..."}`
                       : scanActiveRef.current
                       ? "Scanning - Ready"
@@ -287,7 +301,7 @@ export default function ScanDialog({
                     size="sm"
                     onClick={switchToManual}
                     className="bg-white/90 hover:bg-white"
-                    disabled={isProcessingRef.current}
+                    disabled={isProcessingRef.current || isProcessingScan}
                   >
                     Manual Entry
                   </Button>
@@ -296,15 +310,17 @@ export default function ScanDialog({
                 {/* Centering Guide */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="w-48 h-32 border-2 border-white/30 rounded-lg">
-                    {!isProcessingRef.current && scanActiveRef.current && (
-                      <div className="absolute inset-0 border-2 border-green-400 rounded-lg animate-pulse opacity-30"></div>
-                    )}
+                    {!isProcessingRef.current &&
+                      !isProcessingScan &&
+                      scanActiveRef.current && (
+                        <div className="absolute inset-0 border-2 border-green-400 rounded-lg animate-pulse opacity-30"></div>
+                      )}
                   </div>
                 </div>
               </div>
 
               <div className="text-center text-sm text-gray-600">
-                {isProcessingRef.current
+                {isProcessingRef.current || isProcessingScan
                   ? `Processing barcode ${currentBarcode}...`
                   : "Point camera at barcode. Scanning automatically."}
               </div>
@@ -386,7 +402,7 @@ export default function ScanDialog({
           <p>
             💡 Tip:{" "}
             {useCamera
-              ? isProcessingRef.current
+              ? isProcessingRef.current || isProcessingScan
                 ? "Processing scanned item. Ready for next scan in a moment."
                 : "Hold barcode steady in the frame. Scanner will detect automatically."
               : "Press Enter to submit or switch to camera scanning."}
