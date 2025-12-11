@@ -57,54 +57,45 @@ export default function ScanDialog({
   const lastScannedRef = useRef<string>("");
 
   // When dialog opens, start camera automatically
-
   useEffect(() => {
     if (open && useCamera && !scanActiveRef.current) {
       const t = setTimeout(() => handleCameraScan(), 150);
       return () => clearTimeout(t);
     }
-  }, [open, useCamera]);
+  }, [open, useCamera, scanActiveRef, handleCameraScan]);
 
-  /* 2️⃣  React to every new barcodeInput */
+  // Handle dialog close - stop camera properly
   useEffect(() => {
-    if (!open || !useCamera || !barcodeInput || isProcessingRef.current) return;
-
-    (async () => {
-      isProcessingRef.current = true;
-      setCurrentBarcode(barcodeInput);
-
-      const ok = await handleScanSubmit();
-
-      setScanMessage({
-        type: ok ? "success" : "error",
-        text: ok
-          ? "Barcode scanned – ready for next one!"
-          : "Barcode not found – try again",
-      });
-
-      /* reset so the *same* code can be read again */
+    if (!open) {
+      stopCamera();
+      // Reset states when dialog closes
       setBarcodeInput("");
       setCurrentBarcode("");
+      setScanMessage({ type: null, text: "" });
+      isProcessingRef.current = false;
+      lastScannedRef.current = "";
+      if (scanTimeoutRef.current) {
+        clearTimeout(scanTimeoutRef.current);
+        scanTimeoutRef.current = null;
+      }
+    }
+  }, [open, stopCamera, setBarcodeInput]);
 
-      /* short cool-down before we allow the next scan */
-      scanTimeoutRef.current = setTimeout(() => {
-        isProcessingRef.current = false;
-      }, 800);
-    })();
-  }, [barcodeInput, open, useCamera]);
-
-  // Handle camera barcode detection automatically
+  // Single effect to handle barcode detection from camera
   useEffect(() => {
     if (
-      open &&
-      useCamera &&
-      barcodeInput &&
-      barcodeInput !== lastScannedRef.current &&
-      !isProcessingRef.current
+      !open ||
+      !useCamera ||
+      !barcodeInput ||
+      isProcessingRef.current ||
+      barcodeInput === lastScannedRef.current
     ) {
-      lastScannedRef.current = barcodeInput;
-      processCameraBarcode(barcodeInput);
+      return;
     }
+
+    // Process the barcode
+    lastScannedRef.current = barcodeInput;
+    processCameraBarcode(barcodeInput);
   }, [barcodeInput, open, useCamera]);
 
   const processCameraBarcode = async (barcode: string) => {
@@ -151,7 +142,7 @@ export default function ScanDialog({
     }
   };
 
-  // Clear message after 3 seconds
+  // Clear message after 2 seconds
   useEffect(() => {
     if (!scanMessage.type) return;
     const t = setTimeout(() => setScanMessage({ type: null, text: "" }), 2000);
@@ -207,8 +198,16 @@ export default function ScanDialog({
     }
   };
 
+  // Custom handler for dialog changes that ensures camera cleanup
+  const handleDialogOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      stopCamera();
+    }
+    onOpenChange(newOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

@@ -40,9 +40,6 @@ export function useScanSubmit({
   setRecentScannedItems,
   setCurrentRank,
   setRankings,
-  useCamera,
-  useManualInput,
-  handleCameraScan,
 }: UseScanSubmitProps) {
   const { getStudentRankings } = useStudent();
 
