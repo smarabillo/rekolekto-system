@@ -1,13 +1,3 @@
-interface ScanApiResponse {
-  message: string;
-  scanId: number;
-  material_type: "CAN" | "PET";
-  size: "SMALL" | "LARGE" | null;
-  points: number;
-  studentName: string;
-  itemName: string; 
-}
-
 export interface StudentInfo {
   id: number;
   studentId: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { LayoutDashboard, Users } from "lucide-react";
+import { LayoutDashboard, Users, Trophy } from "lucide-react";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import { NavHeader } from "@/components/nav-header";
@@ -27,6 +27,12 @@ const data = {
       title: "Dashboard",
       url: "/admin/dashboard",
       icon: LayoutDashboard,
+      isActive: true,
+    },
+    {
+      title: "Rankings",
+      url: "/admin/rankings",
+      icon: Trophy,
       isActive: true,
     },
     {

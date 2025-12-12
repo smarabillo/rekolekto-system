@@ -1,9 +1,13 @@
 import AdminLayout from "@/layouts/AdminLayout";
+import StudentsTable from "@/pages/Admin/blocks/StudentsTable";
 
 export default function StudentManegement() {
+
   return (
     <>
-      <AdminLayout>Student Manegement</AdminLayout>
+      <AdminLayout>
+        <StudentsTable />
+      </AdminLayout>
     </>
   );
 }

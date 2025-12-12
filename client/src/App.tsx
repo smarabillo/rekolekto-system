@@ -17,6 +17,7 @@ import EntryPage from "./pages/Entry";
 import AdminLogin from "./pages/Admin/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import StudentManegement from "./pages/Admin/StudentManegement";
+import Rankings from "./pages/Admin/Rankings";
 
 // Student Pages
 import StudentLogin from "./pages/Student/Login";
@@ -48,6 +49,14 @@ export default function App() {
               element={
                 <AdminPrivateRoute>
                   <AdminDashboard />
+                </AdminPrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/rankings"
+              element={
+                <AdminPrivateRoute>
+                  <Rankings />
                 </AdminPrivateRoute>
               }
             />
